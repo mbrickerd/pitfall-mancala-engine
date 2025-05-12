@@ -137,275 +137,136 @@ def calculate_pit_indices(board_arr: List[int]) -> Tuple[int, int, Dict[int, int
 
 
 def print_board(board_arr, pits, current_player: int, last_move: Optional[int] = None):
-    """Print a simplified but reliable Mancala board"""
+    """Print a perfect Mancala board with exact spacing requirements"""
     p1_color = Colors.CYAN
     p2_color = Colors.YELLOW
-
+    
     # Highlight current player
     p1_highlight = Colors.BOLD if current_player == 0 else ""
     p2_highlight = Colors.BOLD if current_player == 1 else ""
-
+    
     # Calculate indices
     p1_store = pits
     p2_store = 2 * pits + 1
-
+    
     # Get store stone counts
     p1_store_stones = board_arr[p1_store]
     p2_store_stones = board_arr[p2_store]
-
+    
     # Stone representation
     stones_symbol = "●"
-    max_stones_display = 6  # Max stones to display (2 rows of 3)
-
-    # Print the board
-    print("\n")
-
-    # Format for pit numbers
-    print("    ", end="")
-    for i in range(pits, 0, -1):
-        highlight = (
-            Colors.MAGENTA + Colors.BOLD
-            if last_move == i and current_player == 1
-            else p2_highlight
-        )
-        print(f"{highlight}{p2_color}[{i}]{Colors.RESET}", end="  ")
-    print()
-
-    # Top border
-    print("   +", end="")
-    for _ in range(pits):
-        print("---+", end="")
-    print()
-
-    # Player 2 pits - first row of stones
-    print("   |", end="")
-    for i in range(2 * pits, pits, -1):
-        stones = board_arr[i]
-        pit_num = 2 * pits + 1 - i
-        highlight = (
-            Colors.MAGENTA + Colors.BOLD
-            if last_move == pit_num and current_player == 1
-            else p2_color
-        )
-
-        # First row of stones (up to 3)
-        first_row = min(3, stones)
-        print(f"{highlight}{stones_symbol * first_row}{Colors.RESET}", end="")
-        print(" " * (3 - first_row), end="|")
-    print()
-
-    # Player 2 pits - second row of stones
-    print("   |", end="")
-    for i in range(2 * pits, pits, -1):
-        stones = board_arr[i]
-        pit_num = 2 * pits + 1 - i
-        highlight = (
-            Colors.MAGENTA + Colors.BOLD
-            if last_move == pit_num and current_player == 1
-            else p2_color
-        )
-
-        # Second row of stones (if more than 3)
-        second_row = min(3, max(0, stones - 3))
-        print(f"{highlight}{stones_symbol * second_row}{Colors.RESET}", end="")
-        print(" " * (3 - second_row), end="|")
-    print()
-
-    # Middle border
-    print("   +", end="")
-    for _ in range(pits):
-        print("---+", end="")
-    print()
-
-    # Stores in the middle
-    print(f"[S]{p2_color}{p2_store_stones:2d}{Colors.RESET}", end="")
-    print(" " * (pits * 4 - 4), end="")  # Simple calculation based on pits
-    print(f"{p1_color}{p1_store_stones:2d}{Colors.RESET}[S]")
-
-    # Middle border
-    print("   +", end="")
-    for _ in range(pits):
-        print("---+", end="")
-    print()
-
-    # Player 1 pits - first row of stones
-    print("   |", end="")
-    for i in range(pits):
-        stones = board_arr[i]
-        pit_num = i + 1
-        highlight = (
-            Colors.MAGENTA + Colors.BOLD
-            if last_move == pit_num and current_player == 0
-            else p1_color
-        )
-
-        # First row of stones (up to 3)
-        first_row = min(3, stones)
-        print(f"{highlight}{stones_symbol * first_row}{Colors.RESET}", end="")
-        print(" " * (3 - first_row), end="|")
-    print()
-
-    # Player 1 pits - second row of stones
-    print("   |", end="")
-    for i in range(pits):
-        stones = board_arr[i]
-        pit_num = i + 1
-        highlight = (
-            Colors.MAGENTA + Colors.BOLD
-            if last_move == pit_num and current_player == 0
-            else p1_color
-        )
-
-        # Second row of stones (if more than 3)
-        second_row = min(3, max(0, stones - 3))
-        print(f"{highlight}{stones_symbol * second_row}{Colors.RESET}", end="")
-        print(" " * (3 - second_row), end="|")
-    print()
-
-    # Bottom border
-    print("   +", end="")
-    for _ in range(pits):
-        print("---+", end="")
-    print()
-
-    # Format for pit numbers
-    print("    ", end="")
-    for i in range(1, pits + 1):
-        highlight = (
-            Colors.MAGENTA + Colors.BOLD
-            if last_move == i and current_player == 0
-            else p1_highlight
-        )
-        print(f"{highlight}{p1_color}[{i}]{Colors.RESET}", end="  ")
-    print("\n")
-
-
-def print_board(board_arr, pits, current_player: int, last_move: Optional[int] = None):
-    """Print a Mancala board with dynamic rows for extra stones"""
-    p1_color = Colors.CYAN
-    p2_color = Colors.YELLOW
-
-    # Highlight current player
-    p1_highlight = Colors.BOLD if current_player == 0 else ""
-    p2_highlight = Colors.BOLD if current_player == 1 else ""
-
-    # Calculate indices
-    p1_store = pits
-    p2_store = 2 * pits + 1
-
-    # Get store stone counts
-    p1_store_stones = board_arr[p1_store]
-    p2_store_stones = board_arr[p2_store]
-
-    # Stone representation
-    stones_symbol = "●"
-    stones_per_row = 3  # Maximum stones per row
-
+    stones_per_row = 3    # Maximum stones per row
+    
     # Calculate how many rows we need for each player's pits
     p1_stones = [board_arr[i] for i in range(pits)]
-    p2_stones = [board_arr[i] for i in range(pits + 1, 2 * pits + 1)]
-
+    p2_stones = [board_arr[i] for i in range(pits+1, 2*pits+1)]
+    
     p1_max_stones = max(p1_stones) if p1_stones else 0
     p2_max_stones = max(p2_stones) if p2_stones else 0
-
+    
     p1_rows_needed = max(2, (p1_max_stones + stones_per_row - 1) // stones_per_row)
     p2_rows_needed = max(2, (p2_max_stones + stones_per_row - 1) // stones_per_row)
-
+    
     print("\n")
-
-    # Format for pit numbers
-    print("    ", end="")
+    
+    # Pit numbers with proper spacing to align in the center
+    print("       ", end="")  # 7 spaces for proper alignment
     for i in range(pits, 0, -1):
-        highlight = (
-            Colors.MAGENTA + Colors.BOLD
-            if last_move == i and current_player == 1
-            else p2_highlight
-        )
-        print(f"{highlight}{p2_color}[{i}]{Colors.RESET}", end="  ")
-    print()
-
+        highlight = Colors.MAGENTA + Colors.BOLD if last_move == i and current_player == 1 else p2_highlight
+        print(f"{highlight}{p2_color}[{i}]{Colors.RESET}", end="     ")  # 5 spaces between pit numbers
+    print("  ")  # 2 spaces at the end for alignment
+    
     # Top border
-    print("   +", end="")
+    print("    +", end="")
     for _ in range(pits):
-        print("---+", end="")
+        print("-------+", end="")
     print()
-
-    # Player 2 pits - display stones in rows
+    
+    # Player 2 pits with exact spacing
     for row in range(p2_rows_needed):
-        print("   |", end="")
-        for i in range(2 * pits, pits, -1):
+        print("    |", end="")
+        for i in range(2*pits, pits, -1):
             stones = board_arr[i]
-            pit_num = 2 * pits + 1 - i
-            highlight = (
-                Colors.MAGENTA + Colors.BOLD
-                if last_move == pit_num and current_player == 1
-                else p2_color
-            )
-
+            pit_num = 2*pits + 1 - i
+            highlight = Colors.MAGENTA + Colors.BOLD if last_move == pit_num and current_player == 1 else p2_color
+            
             # Calculate stones for this row
             start_idx = row * stones_per_row
             end_idx = min(start_idx + stones_per_row, stones)
             stones_in_row = max(0, end_idx - start_idx)
-
-            print(f"{highlight}{stones_symbol * stones_in_row}{Colors.RESET}", end="")
-            print(" " * (3 - stones_in_row), end="|")
+            
+            if stones_in_row > 0:
+                # Exact formatting with proper spacing
+                if stones_in_row == 1:
+                    print(f" {highlight}{stones_symbol}{Colors.RESET}     |", end="")
+                elif stones_in_row == 2:
+                    print(f" {highlight}{stones_symbol}{Colors.RESET} {highlight}{stones_symbol}{Colors.RESET}   |", end="")
+                elif stones_in_row == 3:
+                    print(f" {highlight}{stones_symbol}{Colors.RESET} {highlight}{stones_symbol}{Colors.RESET} {highlight}{stones_symbol}{Colors.RESET} |", end="")
+            else:
+                # Empty pit
+                print("       |", end="")
         print()
-
+    
     # Middle border
-    print("   +", end="")
+    print("    +", end="")
     for _ in range(pits):
-        print("---+", end="")
+        print("-------+", end="")
     print()
-
-    # Stores in the middle
-    print(f"[S]{p2_color}{p2_store_stones:2d}{Colors.RESET}", end="")
-    print(" " * (pits * 4 - 4), end="")  # Simple calculation based on pits
-    print(f"{p1_color}{p1_store_stones:2d}{Colors.RESET}[S]")
-
+    
+    # Stores with proper spacing
+    print(f"[S] {p2_color}{p2_store_stones}{Colors.RESET}", end="")
+    
+    # Calculated spacing that works for the actual dimensions
+    store_spacing = 47
+    print(" " * store_spacing, end="")
+    print(f"{p1_color}{p1_store_stones}{Colors.RESET} [S]")
+    
     # Middle border
-    print("   +", end="")
+    print("    +", end="")
     for _ in range(pits):
-        print("---+", end="")
+        print("-------+", end="")
     print()
-
-    # Player 1 pits - display stones in rows
+    
+    # Player 1 pits with exact spacing
     for row in range(p1_rows_needed):
-        print("   |", end="")
+        print("    |", end="")
         for i in range(pits):
             stones = board_arr[i]
             pit_num = i + 1
-            highlight = (
-                Colors.MAGENTA + Colors.BOLD
-                if last_move == pit_num and current_player == 0
-                else p1_color
-            )
-
+            highlight = Colors.MAGENTA + Colors.BOLD if last_move == pit_num and current_player == 0 else p1_color
+            
             # Calculate stones for this row
             start_idx = row * stones_per_row
             end_idx = min(start_idx + stones_per_row, stones)
             stones_in_row = max(0, end_idx - start_idx)
-
-            print(f"{highlight}{stones_symbol * stones_in_row}{Colors.RESET}", end="")
-            print(" " * (3 - stones_in_row), end="|")
+            
+            if stones_in_row > 0:
+                # Exact formatting with proper spacing
+                if stones_in_row == 1:
+                    print(f" {highlight}{stones_symbol}{Colors.RESET}     |", end="")
+                elif stones_in_row == 2:
+                    print(f" {highlight}{stones_symbol}{Colors.RESET} {highlight}{stones_symbol}{Colors.RESET}   |", end="")
+                elif stones_in_row == 3:
+                    print(f" {highlight}{stones_symbol}{Colors.RESET} {highlight}{stones_symbol}{Colors.RESET} {highlight}{stones_symbol}{Colors.RESET} |", end="")
+            else:
+                # Empty pit
+                print("       |", end="")
         print()
-
+    
     # Bottom border
-    print("   +", end="")
+    print("    +", end="")
     for _ in range(pits):
-        print("---+", end="")
+        print("-------+", end="")
     print()
-
-    # Format for pit numbers
-    print("    ", end="")
-    for i in range(1, pits + 1):
-        highlight = (
-            Colors.MAGENTA + Colors.BOLD
-            if last_move == i and current_player == 0
-            else p1_highlight
-        )
-        print(f"{highlight}{p1_color}[{i}]{Colors.RESET}", end="  ")
-    print("\n")
-
+    
+    # Pit numbers with proper spacing to align in the center
+    print("       ", end="")  # 7 spaces for proper alignment
+    for i in range(1, pits+1):
+        highlight = Colors.MAGENTA + Colors.BOLD if last_move == i and current_player == 0 else p1_highlight
+        print(f"{highlight}{p1_color}[{i}]{Colors.RESET}", end="     ")  # 5 spaces between pit numbers
+    print("  ")  # 2 spaces at the end for alignment
+    print()
 
 def display_move_animation(game_service, game_id, pit_selected, current_player, pits):
     """
