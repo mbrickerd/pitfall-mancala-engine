@@ -1,0 +1,10 @@
+[project]
+name = "mancala-game"
+version = "0.1.0"
+description = "Mancala Game API"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn>=0.23.2",
+    "pydantic>=2.4.0",
+]
