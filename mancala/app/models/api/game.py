@@ -10,13 +10,13 @@ class GameCreate(BaseModel):
     player1_name: str = "Player 1"
     player2_name: str | None = None
     player2_type: PlayerTypeEnum = PlayerTypeEnum.AGENT
-    
+
     class Config:
         json_schema_extra = {
             "example": {
                 "player1_name": "Human",
                 "player2_name": "Agent",
-                "player2_type": "agent" 
+                "player2_type": "agent",
             }
         }
 
@@ -45,7 +45,7 @@ class GameResponse(BaseModel):
     status: GameStatusEnum
     moves: list[Move] = []
     created_at: datetime
-    
+
     class Config:
         json_schema_extra = {
             "example": {
@@ -54,6 +54,6 @@ class GameResponse(BaseModel):
                 "current_player": "player1",
                 "status": "active",
                 "moves": [],
-                "created_at": "2023-10-27T12:34:56.789Z"
+                "created_at": "2023-10-27T12:34:56.789Z",
             }
         }

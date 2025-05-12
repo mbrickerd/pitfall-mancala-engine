@@ -14,7 +14,7 @@ class MoveResult(BaseModel):
     message: str
     extra_turn: bool = False
     is_game_over: bool = False
-    
+
 
 class MoveResponse(BaseModel):
     success: bool

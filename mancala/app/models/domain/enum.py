@@ -1,5 +1,6 @@
 from enum import Enum, auto
 
+
 class PlayerTypeEnum(str, Enum):
     HUMAN = auto()
     AGENT = auto()
